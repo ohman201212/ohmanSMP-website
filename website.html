@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ohmanSMP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Dark Spooky Purple & Pumpkin Accent Palette */
+      --bg-dark: #09060e;
+      --bg-card: #130d1d;
+      --bg-card-hover: #1c142b;
+      --border-color: #2e2042;
+      --accent-gold: #f97316; /* Clean Spooky Pumpkin Orange */
+      --accent-gold-glow: rgba(249, 115, 22, 0.25);
+      --accent-purple: #a855f7;
+      --accent-purple-glow: rgba(168, 85, 247, 0.2);
+      --accent-red: #ef4444;
+      --text-main: #f3f4f6;
+      --text-muted: #a0aec0;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    .bg-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.12) 0%, transparent 60%),
+        linear-gradient(to right, rgba(168, 85, 247, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(168, 85, 247, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 40px 40px, 40px 40px;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(9, 6, 14, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-purple);
+      text-decoration: none;
+      display: inline-block;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-title span {
+      color: var(--accent-gold);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      list-style: none;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .nav-btn:hover {
+      color: #fff;
+      background: rgba(168, 85, 247, 0.1);
+    }
+
+    .nav-btn.active {
+      color: var(--accent-gold);
+      background: rgba(249, 115, 22, 0.12);
+      border-color: rgba(249, 115, 22, 0.3);
+    }
+
+    main {
+      flex: 1;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .launch-notice {
+      display: inline-block;
+      background: rgba(168, 85, 247, 0.15);
+      color: var(--accent-purple);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      padding: 0.35rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      box-shadow: 0 0 12px var(--accent-purple-glow);
+    }
+
+    .hero {
+      text-align: center;
+      padding: 4rem 1.5rem;
+      background: radial-gradient(circle at center, rgba(168, 85, 247, 0.12) 0%, rgba(249, 115, 22, 0.05) 50%, transparent 75%);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      margin-bottom: 2.5rem;
+    }
+
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 2rem auto;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent-gold);
+      color: #000;
+      font-weight: 700;
+      padding: 0.8rem 1.75rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: var(--transition);
+      box-shadow: 0 4px 14px var(--accent-gold-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      font-weight: 600;
+      padding: 0.8rem 1.75rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(168, 85, 247, 0.12);
+      border-color: rgba(168, 85, 247, 0.4);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      border-color: rgba(168, 85, 247, 0.4);
+      background: var(--bg-card-hover);
+    }
+
+    .card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      color: #fff;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .connection-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .platform-selector {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+
+    .platform-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .platform-btn.active {
+      color: #fff;
+      background: rgba(168, 85, 247, 0.15);
+    }
+
+    .connection-details {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .info-value {
+      font-family: monospace;
+      font-size: 1.1rem;
+      color: var(--accent-gold);
+      font-weight: 700;
+    }
+
+    .badge-recommended {
+      background: rgba(249, 115, 22, 0.15);
+      color: var(--accent-gold);
+      border: 1px solid rgba(249, 115, 22, 0.4);
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .update-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .update-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .update-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      color: #fff;
+    }
+
+    .update-date {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .update-text {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .rules-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .rule-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .rule-num {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--accent-red);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      font-weight: 800;
+      font-size: 1rem;
+      min-width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .rule-content h4 {
+      font-size: 1.1rem;
+      color: #fff;
+      margin-bottom: 0.25rem;
+    }
+
+    .rule-content p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .faq-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .faq-header {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 1.25rem 1.5rem;
+      color: #fff;
+      text-align: left;
+      font-weight: 600;
+      font-size: 1.05rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-header:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .faq-body {
+      padding: 0 1.5rem 1.25rem 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      display: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 0.5rem;
+      padding-top: 1rem;
+    }
+
+    .faq-item.open .faq-body {
+      display: block;
+    }
+
+    .faq-icon {
+      transition: transform 0.2s;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(180deg);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--accent-gold);
+      color: #000;
+      font-weight: 700;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-sm);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: var(--transition);
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: auto;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.2rem; }
+      .nav-container { flex-direction: column; gap: 1rem; }
+      .info-row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      .update-header { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+
+  <header>
+    <div class="nav-container">
+      <a href="#" class="brand-title" onclick="switchTab('home')">ohman201212<span>.org</span></a>
+      <ul class="nav-links">
+        <li><button class="nav-btn active" onclick="switchTab('home')">Home</button></li>
+        <li><button class="nav-btn" onclick="switchTab('server')">Minecraft Server</button></li>
+        <li><button class="nav-btn" onclick="switchTab('updates')">Updates</button></li>
+        <li><button class="nav-btn" onclick="switchTab('rules')">Rules & FAQ</button></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <section id="tab-home" class="tab-content active">
+      <div class="hero">
+        <div class="launch-notice">Estimated Launch Date: 10.5.2026</div>
+        <h1>Welcome to <span style="color: var(--accent-gold);">ohmanSMP</span></h1>
+        <p>A fun vanilla SMP, you can join with friends, build bases, and raid other bases!</p>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="switchTab('server')">Server Info</button>
+          <button class="btn-secondary" onclick="switchTab('rules')">Rules & FAQ</button>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Vanilla Gameplay</h3>
+          <p>Play normally! There aren't things like land claiming, teleportation (unless you set a spot as home), and you can do anything (but you must follow the rules.)</p>
+        </div>
+        <div class="card">
+          <h3>Cross-Platform Support</h3>
+          <p>Your PC and Mobile friends can all join together!</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-server" class="tab-content">
+      <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 2rem; margin-bottom: 1.5rem;">Connection Info</h2>
+      
+      <div class="connection-panel">
+        <div class="platform-selector">
+          <button class="platform-btn active" id="btn-java" onclick="setPlatform('java')">Java Edition</button>
+          <button class="platform-btn" id="btn-bedrock" onclick="setPlatform('bedrock')">Bedrock Edition</button>
+        </div>
+
+        <div class="connection-details">
+          <div class="info-row">
+            <div>
+              <div class="info-label">Server Address</div>
+              <div class="info-value" id="server-ip">play.ohman201212.org</div>
+            </div>
+            <button class="btn-secondary" onclick="copyIP()">Copy IP</button>
+          </div>
+
+          <div class="info-row">
+            <div>
+              <div class="info-label">Port</div>
+              <div class="info-value" id="server-port">25565</div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div>
+              <div class="info-label">Version</div>
+              <div class="info-value" id="server-version">26.2</div>
+            </div>
+            <span class="badge-recommended" id="version-badge">Recommended</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-updates" class="tab-content">
+      <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 2rem; margin-bottom: 1.5rem;">Updates</h2>
+      
+      <div class="update-card">
+        <div class="update-header">
+          <div class="update-title">Server almost open!</div>
+          <div class="update-date">October 4, 2026</div>
+        </div>
+        <div class="update-text">
+          ohmanSMP is opening soon, our estimated launch date is October 5, 2026.
+        </div>
+      </div>
+
+      <div class="update-card">
+        <div class="update-header">
+          <div class="update-title">Website Opening!</div>
+          <div class="update-date">October 4, 2026</div>
+        </div>
+        <div class="update-text">
+          The website has officially been opened to the public!
+        </div>
+      </div>
+
+    </section>
+
+    <section id="tab-rules" class="tab-content">
+      <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 2rem; margin-bottom: 1rem;">Rules</h2>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">Rules to keep the server running smoothly.</p>
+
+      <div class="rules-list" style="margin-bottom: 3rem;">
+        <div class="rule-item">
+          <div class="rule-num">1</div>
+          <div class="rule-content">
+            <h4>No Cheating or Hacked Clients</h4>
+            <p>Flight hacks, X-ray mods, speed hacks, and auto-clickers are not allowed.</p>
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-num">2</div>
+          <div class="rule-content">
+            <h4>No Lag Machines</h4>
+            <p>Do not build redstone devices or setups designed to lag the server.</p>
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-num">3</div>
+          <div class="rule-content">
+            <h4>No Duplication Exploits</h4>
+            <p>Using glitches or bugs to duplicate items is forbidden.</p>
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-num">4</div>
+          <div class="rule-content">
+            <h4>Chat Conduct</h4>
+            <p>Keep chat clean from spam, advertising, and severe harassment.</p>
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-num">5</div>
+          <div class="rule-content">
+            <h4>No Alternate Account Abuse</h4>
+            <p>Do not use extra accounts to evade bans or punishments.</p>
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-num">6</div>
+          <div class="rule-content">
+            <h4>No Staff Impersonation</h4>
+            <p>Do not pretend to be an admin or owner in chat.</p>
+          </div>
+        </div>
+      </div>
+
+      <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 2rem; margin-bottom: 1.5rem;">FAQ</h2>
+      <div class="faq-container">
+        <div class="faq-item">
+          <button class="faq-header" onclick="toggleFAQ(this)">
+            How do I join on Bedrock Edition?
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-body">
+            Use server IP <code>play.ohman201212.org</code> and port <code>24560</code>.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-header" onclick="toggleFAQ(this)">
+            What version should I use?
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-body">
+            For Java Edition, version <b>26.2</b> is recommended. For Bedrock Edition, using the latest update is recommended.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-header" onclick="toggleFAQ(this)">
+            Is there land claiming?
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-body">
+            No. Build further out if you want to stay away from other players.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-header" onclick="toggleFAQ(this)">
+            Are performance mods allowed?
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-body">
+            Client optimization mods like Sodium or Optifine are completely fine.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-header" onclick="toggleFAQ(this)">
+            Will the world ever reset?
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-body">
+            We aim to keep the same world, the world will never reset unless necessary, which will be posted in the Updates page.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-header" onclick="toggleFAQ(this)">
+            Why can't I connect on console?
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-body">
+            There isn't a method on our end to support console players joining... yet. You can use an app on your phone, we recommend using BedrockTogether, just open the app, copy the Bedrock Edition IP Address and Port, paste it into the app, and run the server.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-header" onclick="toggleFAQ(this)">
+            Are AFK farms allowed?
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-body">
+            Yes, as long as they don't cause server lag.
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast">IP address copied to clipboard!</div>
+
+  <footer>
+    <p>&copy; 2026 ohman201212.org All rights reserved.</p>
+  </footer>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+      const selectedTab = document.getElementById(`tab-${tabId}`);
+      if (selectedTab) selectedTab.classList.add('active');
+
+      const activeNavBtn = Array.from(document.querySelectorAll('.nav-btn')).find(
+        btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(tabId)
+      );
+      if (activeNavBtn) activeNavBtn.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setPlatform(platform) {
+      const btnJava = document.getElementById('btn-java');
+      const btnBedrock = document.getElementById('btn-bedrock');
+      const ipElem = document.getElementById('server-ip');
+      const portElem = document.getElementById('server-port');
+      const versionElem = document.getElementById('server-version');
+
+      if (platform === 'java') {
+        btnJava.classList.add('active');
+        btnBedrock.classList.remove('active');
+        ipElem.textContent = 'play.ohman201212.org';
+        portElem.textContent = '25565';
+        versionElem.textContent = '26.2';
+      } else {
+        btnBedrock.classList.add('active');
+        btnJava.classList.remove('active');
+        ipElem.textContent = 'play.ohman201212.org';
+        portElem.textContent = '24560';
+        versionElem.textContent = 'Latest';
+      }
+    }
+
+    function copyIP() {
+      const ipText = document.getElementById('server-ip').textContent;
+      navigator.clipboard.writeText(ipText).then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+      });
+    }
+
+    function toggleFAQ(headerBtn) {
+      const item = headerBtn.parentElement;
+      item.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
